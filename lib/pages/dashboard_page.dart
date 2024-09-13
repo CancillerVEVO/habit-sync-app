@@ -24,9 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
       }
     } finally {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-        );
+        Navigator.pushNamed(context, '/login');
       }
     }
   }

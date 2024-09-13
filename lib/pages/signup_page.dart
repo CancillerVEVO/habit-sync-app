@@ -5,7 +5,6 @@ import 'package:habit_sync_frontend/pages/dashboard_page.dart';
 import 'package:habit_sync_frontend/pages/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-final _formKey = GlobalKey<FormState>();
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -16,7 +15,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   // Variables
-
+  final _signupKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _redirecting = false;
   bool _isObscured = true;
@@ -109,9 +108,7 @@ class _SignupPageState extends State<SignupPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const DashboardPage()),
-        );
+        Navigator.pushNamed(context, '/dashboard');
       }
     }, onError: (error) {
       if (error is AuthException) {
@@ -127,7 +124,10 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void dispose() {
     _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     _authStateSubscription.cancel();
+
     super.dispose();
   }
 
@@ -137,7 +137,7 @@ class _SignupPageState extends State<SignupPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
-            key: _formKey,
+            key: _signupKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -196,7 +196,7 @@ class _SignupPageState extends State<SignupPage> {
                 // sign up button
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (_signupKey.currentState!.validate()) {
                       _signUp();
                     }
                   },
@@ -222,12 +222,9 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()));
+                      Navigator.pushNamed(context, '/login');
                     },
-                    child: const Text("Alredy have an account?"))
+                    child: const Text("Already have an account? Sign in"))
               ],
             )),
       ),

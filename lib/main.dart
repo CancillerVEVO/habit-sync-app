@@ -26,7 +26,12 @@ class MyApp extends StatelessWidget {
     return  MaterialApp(
       title: 'Supabase Flutter',
       debugShowCheckedModeBanner: false,
-      home: supabase.auth.currentSession == null ? const SignupPage() : const DashboardPage(),
+      home: supabase.auth.currentSession == null ? const LoginPage() : const DashboardPage(),
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/signup': (context) => const SignupPage(),
+        '/dashboard': (context) => const DashboardPage(),
+      }
     );
   }
 }
