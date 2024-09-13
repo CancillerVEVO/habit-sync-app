@@ -23,11 +23,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      title: 'Supabase Flutter',
-      debugShowCheckedModeBanner: false,
-      home: supabase.auth.currentSession == null ? const SignupPage() : const DashboardPage(),
-    );
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Supabase Flutter',
+        theme: ThemeData.dark().copyWith(
+            primaryColor: Colors.green,
+            textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(foregroundColor: Colors.green)),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.green))),
+        home: supabase.auth.currentSession == null
+            ? const LoginPage()
+            : const DashboardPage(),
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/signup': (context) => const SignupPage(),
+          '/dashboard': (context) => const DashboardPage(),
+        });
   }
 }
 
