@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:habit_sync_frontend/main.dart';
-import 'package:habit_sync_frontend/pages/dashboard_page.dart';
-import 'package:habit_sync_frontend/pages/login_page.dart';
+import 'package:habit_sync_frontend/pages/dashboard/dashboard_page.dart';
+import 'package:habit_sync_frontend/pages/auth/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 
@@ -201,7 +201,6 @@ class _SignupPageState extends State<SignupPage> {
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.blue),
                     padding: WidgetStateProperty.all(
                       const EdgeInsets.symmetric(
                           horizontal: 24.0, vertical: 12.0),

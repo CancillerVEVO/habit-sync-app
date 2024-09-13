@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:habit_sync_frontend/pages/login_page.dart';
+import 'package:habit_sync_frontend/pages/auth/login_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 
 class DashboardPage extends StatefulWidget {
@@ -31,9 +31,6 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Dashboard"),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

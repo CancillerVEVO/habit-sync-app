@@ -12,8 +12,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final _loginKey = GlobalKey<FormState>();
+
   // Variables
   bool _isLoading = false;
   bool _redirecting = false;
@@ -157,7 +157,6 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.blue),
                     padding: WidgetStateProperty.all(
                       const EdgeInsets.symmetric(
                           horizontal: 24.0, vertical: 12.0),

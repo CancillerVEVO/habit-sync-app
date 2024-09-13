@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:habit_sync_frontend/pages/dashboard_page.dart';
-import 'package:habit_sync_frontend/pages/login_page.dart';
-import 'package:habit_sync_frontend/pages/signup_page.dart';
+import 'package:habit_sync_frontend/pages/dashboard/dashboard_page.dart';
+import 'package:habit_sync_frontend/pages/auth/login_page.dart';
+import 'package:habit_sync_frontend/pages/auth/signup_page.dart';
+import 'package:habit_sync_frontend/services/navigation/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -23,25 +24,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Supabase Flutter',
-        theme: ThemeData.dark().copyWith(
-            primaryColor: Colors.green,
-            textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(foregroundColor: Colors.green)),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green))),
-        home: supabase.auth.currentSession == null
-            ? const LoginPage()
-            : const DashboardPage(),
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/signup': (context) => const SignupPage(),
-          '/dashboard': (context) => const DashboardPage(),
-        });
+    return MaterialApp.router(
+      title: 'Habit Sync',
+      debugShowCheckedModeBanner: false,
+      routerConfig: AppRouter.router,
+    );
   }
 }
 
@@ -51,8 +38,14 @@ extension ContextExtension on BuildContext {
       SnackBar(
         content: Text(message),
         backgroundColor: isError
-            ? Theme.of(this).colorScheme.error
-            : Theme.of(this).snackBarTheme.backgroundColor,
+            ? Theme
+            .of(this)
+            .colorScheme
+            .error
+            : Theme
+            .of(this)
+            .snackBarTheme
+            .backgroundColor,
       ),
     );
   }
