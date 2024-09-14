@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:habit_sync_frontend/pages/dashboard/dashboard_page.dart';
-import 'package:habit_sync_frontend/pages/auth/login_page.dart';
-import 'package:habit_sync_frontend/pages/auth/signup_page.dart';
 import 'package:habit_sync_frontend/services/navigation/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
 
   String supabaseUrl = dotenv.get('SUPABASE_URL');
@@ -14,7 +15,16 @@ Future<void> main() async {
 
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
 
-  runApp(const MyApp());
+  final supabaseClient = Supabase.instance.client;
+
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider(create: (context) => MyAuthState(supabaseClient)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 final supabase = Supabase.instance.client;
@@ -38,14 +48,8 @@ extension ContextExtension on BuildContext {
       SnackBar(
         content: Text(message),
         backgroundColor: isError
-            ? Theme
-            .of(this)
-            .colorScheme
-            .error
-            : Theme
-            .of(this)
-            .snackBarTheme
-            .backgroundColor,
+            ? Theme.of(this).colorScheme.error
+            : Theme.of(this).snackBarTheme.backgroundColor,
       ),
     );
   }

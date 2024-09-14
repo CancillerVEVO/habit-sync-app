@@ -15,7 +15,7 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
   void _goBranch(String route) {
     context.goNamed(route);

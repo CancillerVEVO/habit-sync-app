@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:habit_sync_frontend/main.dart';
+import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,9 +35,10 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = true;
       });
 
-      await supabase.auth.signInWithPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+      final authState = Provider.of<MyAuthState>(context, listen: false);
+
+      await authState.signIn(
+          _emailController.text.trim(), _passwordController.text.trim());
 
       if (mounted) {
         context.showSnackBar('Auth succeeded!');
@@ -82,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Navigator.pushNamed(context, '/dashboard');
+        context.goNamed(RouteConstants.dashboard);
       }
     }, onError: (error) {
       if (error is AuthException) {
@@ -177,9 +182,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
+                      context.goNamed(RouteConstants.signup);
                     },
-                    child: const Text("Don't have an account? Sign up"))
+                    child: Text('Don\'t have an account? Sign up'))
               ],
             )),
       ),

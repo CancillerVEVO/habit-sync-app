@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:habit_sync_frontend/pages/auth/login_page.dart';
+import 'package:habit_sync_frontend/pages/auth/signup_page.dart';
 import 'package:habit_sync_frontend/pages/dashboard/dashboard_page.dart';
 import 'package:habit_sync_frontend/pages/groups/create_group_page.dart';
 import 'package:habit_sync_frontend/pages/groups/group_list_page.dart';
 import 'package:habit_sync_frontend/pages/groups/group_page.dart';
 import 'package:habit_sync_frontend/pages/profile/user_profile_page.dart';
 import 'package:habit_sync_frontend/pages/wrapper/main_wrapper_page.dart';
+import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
 import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
+import 'package:provider/provider.dart';
 
 class AppRouter {
   AppRouter._();
@@ -90,9 +93,6 @@ class AppRouter {
         ],
       ),
 
-
-
-
       // Login
       GoRoute(
           path: '/login',
@@ -105,8 +105,32 @@ class AppRouter {
           path: '/signup',
           name: RouteConstants.signup,
           builder: (context, state) {
-            return const LoginPage();
+            return const SignupPage();
           }),
     ],
+    redirect: (context, state) {
+      final authState = Provider.of<MyAuthState>(context, listen: false);
+      print(authState.currentSession?.user.id);
+      final isLoggedIn = authState.currentSession?.user.id != null;
+      final isLoggingIn = state.matchedLocation == '/login';
+      final isSigningUp = state.matchedLocation == '/signup';
+
+      // Si el usuario no está autenticado y está tratando de acceder a una página protegida
+      if (!isLoggedIn) {
+        if (!isLoggingIn && !isSigningUp) {
+          return '/login';
+        }
+      }
+
+      // Si el usuario está autenticado y trata de acceder a /login o /signup, redirige a /dashboard
+      if (isLoggedIn) {
+        if (isLoggingIn || isSigningUp) {
+          return '/dashboard';
+        }
+      }
+
+      // Si no hay redirección, retorna null
+      return null;
+    },
   );
 }

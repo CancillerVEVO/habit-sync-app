@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:habit_sync_frontend/main.dart';
-import 'package:habit_sync_frontend/pages/dashboard/dashboard_page.dart';
-import 'package:habit_sync_frontend/pages/auth/login_page.dart';
+import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -38,9 +39,10 @@ class _SignupPageState extends State<SignupPage> {
         _isLoading = true;
       });
 
-      await supabase.auth.signUp(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+      final authState = Provider.of<MyAuthState>(context, listen: false);
+
+      await authState.signUp(
+          _emailController.text.trim(), _passwordController.text.trim());
 
       if (mounted) {
         context.showSnackBar('Auth succeeded!');
@@ -49,6 +51,7 @@ class _SignupPageState extends State<SignupPage> {
       if (mounted) context.showSnackBar(error.message, isError: true);
     } catch (error) {
       if (mounted) {
+        print(error);
         context.showSnackBar("Unexpected error occured", isError: true);
       }
     } finally {
@@ -108,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Navigator.pushNamed(context, '/dashboard');
+        context.goNamed(RouteConstants.dashboard);
       }
     }, onError: (error) {
       if (error is AuthException) {
@@ -221,7 +224,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/login');
+                      context.goNamed(RouteConstants.login);
                     },
                     child: const Text("Already have an account? Sign in"))
               ],
