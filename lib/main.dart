@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:habit_sync_frontend/pages/dashboard_page.dart';
-import 'package:habit_sync_frontend/pages/login_page.dart';
-import 'package:habit_sync_frontend/pages/signup_page.dart';
+import 'package:habit_sync_frontend/services/navigation/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
+import 'package:habit_sync_frontend/utils/app_colors.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
 
   String supabaseUrl = dotenv.get('SUPABASE_URL');
@@ -13,7 +17,16 @@ Future<void> main() async {
 
   await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
 
-  runApp(const MyApp());
+  final supabaseClient = Supabase.instance.client;
+
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider(create: (context) => AuthStateProvider(supabaseClient)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 final supabase = Supabase.instance.client;
@@ -23,25 +36,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Supabase Flutter',
-        theme: ThemeData.dark().copyWith(
-            primaryColor: Colors.green,
-            textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(foregroundColor: Colors.green)),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green))),
-        home: supabase.auth.currentSession == null
-            ? const LoginPage()
-            : const DashboardPage(),
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/signup': (context) => const SignupPage(),
-          '/dashboard': (context) => const DashboardPage(),
-        });
+    return MaterialApp.router(
+      title: 'Habit Sync',
+      debugShowCheckedModeBanner: false,
+      routerConfig: AppRouter.router,
+      theme: ThemeData(
+        snackBarTheme: const SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
+        ),
+        textTheme: GoogleFonts.robotoTextTheme(),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: AppColors.text,
+          unselectedItemColor: AppColors.text,
+          backgroundColor: AppColors.background,
+        ),
+        scaffoldBackgroundColor: AppColors.background,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.background,
+          titleTextStyle: TextStyle(
+            color: AppColors.text,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
   }
 }
 

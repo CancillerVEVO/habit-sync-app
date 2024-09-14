@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:habit_sync_frontend/pages/login_page.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
+import 'package:provider/provider.dart';
+import '../../main.dart';
+import 'package:go_router/go_router.dart';
+import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import '../main.dart';
-
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -14,8 +15,10 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Future<void> _signOut() async {
+    final authState = Provider.of<AuthStateProvider>(context, listen: false);
+    ;
     try {
-      await supabase.auth.signOut();
+      await authState.signOut();
     } on AuthException catch (error) {
       if (mounted) context.showSnackBar(error.message, isError: true);
     } catch (error) {
@@ -24,16 +27,17 @@ class _DashboardPageState extends State<DashboardPage> {
       }
     } finally {
       if (mounted) {
-        Navigator.pushNamed(context, '/login');
+        context.goNamed(RouteConstants.login);
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Dashboard"),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
