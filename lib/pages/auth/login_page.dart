@@ -6,7 +6,7 @@ import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = true;
       });
 
-      final authState = Provider.of<MyAuthState>(context, listen: false);
+      final authState = Provider.of<AuthStateProvider>(context, listen: false);
 
       await authState.signIn(
           _emailController.text.trim(), _passwordController.text.trim());

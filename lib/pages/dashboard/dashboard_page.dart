@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
-import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:go_router/go_router.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
 import 'package:provider/provider.dart';
 import '../../main.dart';
+import 'package:go_router/go_router.dart';
+import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -15,7 +15,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   Future<void> _signOut() async {
-    final authState = Provider.of<MyAuthState>(context, listen: false);
+    final authState = Provider.of<AuthStateProvider>(context, listen: false);
     ;
     try {
       await authState.signOut();
@@ -34,6 +34,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       body: Center(
         child: Column(

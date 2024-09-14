@@ -38,6 +38,7 @@ class _MainWrapperState extends State<MainWrapper> {
         break;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +50,7 @@ class _MainWrapperState extends State<MainWrapper> {
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
-          selectedItemColor: Colors.blue,
+          elevation: 0,
           items: const <BottomNavigationBarItem>[
             // Profile
             BottomNavigationBarItem(
@@ -61,8 +62,7 @@ class _MainWrapperState extends State<MainWrapper> {
             // Groups
             BottomNavigationBarItem(
                 icon: Icon(Icons.group), label: RouteConstants.groups),
-          ]
-      ),
+          ]),
     );
   }
 }

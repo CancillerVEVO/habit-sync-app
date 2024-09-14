@@ -5,7 +5,7 @@ import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -39,7 +39,7 @@ class _SignupPageState extends State<SignupPage> {
         _isLoading = true;
       });
 
-      final authState = Provider.of<MyAuthState>(context, listen: false);
+      final authState = Provider.of<AuthStateProvider>(context, listen: false);
 
       await authState.signUp(
           _emailController.text.trim(), _passwordController.text.trim());

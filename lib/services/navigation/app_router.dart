@@ -8,7 +8,7 @@ import 'package:habit_sync_frontend/pages/groups/group_list_page.dart';
 import 'package:habit_sync_frontend/pages/groups/group_page.dart';
 import 'package:habit_sync_frontend/pages/profile/user_profile_page.dart';
 import 'package:habit_sync_frontend/pages/wrapper/main_wrapper_page.dart';
-import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
 import 'package:habit_sync_frontend/services/navigation/router_constants.dart';
 import 'package:provider/provider.dart';
 
@@ -73,21 +73,23 @@ class AppRouter {
                       return GroupListPage();
                     },
                     routes: [
-                      // Group Detail
-                      GoRoute(
-                        path: ':groupId',
-                        name: RouteConstants.group,
-                        builder: (context, state) {
-                          return GroupPage();
-                        },
-                      ),
-                      // Create Group
                       GoRoute(
                           path: 'create',
                           name: RouteConstants.createGroup,
                           builder: (context, state) {
                             return const CreateGroupPage();
                           }),
+                      // Group Detail
+                      GoRoute(
+                        path: ':groupId',
+                        name: RouteConstants.group,
+                        builder: (context, state) {
+                          final String groupId = state.pathParameters['groupId']!;
+
+                          return GroupPage(groupId: groupId);
+                        },
+                      ),
+                      // Create Group
                     ]),
               ]),
         ],
@@ -109,7 +111,7 @@ class AppRouter {
           }),
     ],
     redirect: (context, state) {
-      final authState = Provider.of<MyAuthState>(context, listen: false);
+      final authState = Provider.of<AuthStateProvider>(context, listen: false);
       print(authState.currentSession?.user.id);
       final isLoggedIn = authState.currentSession?.user.id != null;
       final isLoggingIn = state.matchedLocation == '/login';

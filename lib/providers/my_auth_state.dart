@@ -1,9 +1,9 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MyAuthState {
+class AuthStateProvider {
   final SupabaseClient _supabaseClient;
 
-  MyAuthState(this._supabaseClient);
+  AuthStateProvider(this._supabaseClient);
 
   Future<void> signIn(String email, String password) async {
     try {

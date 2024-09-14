@@ -3,7 +3,9 @@ import 'package:habit_sync_frontend/services/navigation/app_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:habit_sync_frontend/services/auth/my_auth_state.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:habit_sync_frontend/providers/my_auth_state.dart';
+import 'package:habit_sync_frontend/utils/app_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +22,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (context) => MyAuthState(supabaseClient)),
+        Provider(create: (context) => AuthStateProvider(supabaseClient)),
       ],
       child: const MyApp(),
     ),
@@ -38,6 +40,25 @@ class MyApp extends StatelessWidget {
       title: 'Habit Sync',
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
+      theme: ThemeData(
+        snackBarTheme: const SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
+        ),
+        textTheme: GoogleFonts.robotoTextTheme(),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: AppColors.text,
+          unselectedItemColor: AppColors.text,
+          backgroundColor: AppColors.background,
+        ),
+        scaffoldBackgroundColor: AppColors.background,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.background,
+          titleTextStyle: TextStyle(
+            color: AppColors.text,
+            fontSize: 20,
+          ),
+        ),
+      ),
     );
   }
 }
